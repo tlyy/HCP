@@ -1,7 +1,7 @@
 for i in 1; do
     for game in Assault Asterix BankHeist BattleZone ChopperCommand CrazyClimber Freeway Frostbite Gopher Kangaroo KungFuMaster Pong Qbert UpNDown; do
         python -m bbf.train \
-                --agent=BBF \
+                --agent=HCP \
                 --gin_files=bbf/configs/HCP.gin \
                 --base_dir=exp/hcp/$game/$i \
                 --gin_bindings="DataEfficientAtariRunner.game_name = '$game'"

@@ -405,7 +405,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
           human_norm_ret = normalize_score(cum_rewards[-1], self.game_name)
 
           print()
-          print('Steps executed: {} '.format(total_steps) +
+          logging.info('Steps executed: {} '.format(total_steps) +
                 'Num episodes: {} '.format(len(cum_rewards)) +
                 'Episode length: {} '.format(cum_lengths[-1]) +
                 'Return: {} '.format(cum_rewards[-1]) +

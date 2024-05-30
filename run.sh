@@ -24,6 +24,7 @@ done
 #                 --resets \
 #                 --reset_interval 20000 \
 #                 --hcp \
-#                 --threshold 0.0
+#                 --threshold 0.0 \
+#                 --rsp_weight 0.8
 #     done
 # done

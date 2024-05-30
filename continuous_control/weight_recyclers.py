@@ -46,7 +46,8 @@ def weight_reinit_random(param,
                          key,
                          weight_scaling=False,
                          scale=1.0,
-                         weights_type='incoming'):
+                         weights_type='incoming',
+                         sp_weight=0.5):
   """Randomly reinit recycled weights and may scale its norm.
 
   If scaling applied, the norm of recycled weights equals
@@ -87,7 +88,7 @@ def weight_reinit_random(param,
         new_param, axes)
     new_param = normalized_new_param * non_recycled_norm
 
-  param = jnp.where(mask == 1, 0.2 * new_param + 0.8 * param, param)
+  param = jnp.where(mask == 1, (1-sp_weight) * new_param + sp_weight * param, param)
   return param
 
 
@@ -281,6 +282,7 @@ def jit_rsp(
   total_count,
   dead_neurons_threshold,
   init_method_outgoing,
+  sp_weight,
 ):
   activations_score_dict = flax.traverse_util.flatten_dict(
         intermediates, sep='/')
@@ -317,7 +319,8 @@ def jit_rsp(
       weight_reinit_random,
       weight_scaling=False,
       scale=1,
-      weights_type='incoming')
+      weights_type='incoming',
+      sp_weight=sp_weight)
   weight_random_reset_fn = jax.jit(functools.partial(jax.tree_map, reinit_fn))
   params = weight_random_reset_fn(params, incoming_mask, incoming_random_keys)
 
@@ -329,7 +332,8 @@ def jit_rsp(
         weight_reinit_random,
         weight_scaling=False,
         scale=1,
-        weights_type='outgoing')
+        weights_type='outgoing',
+        sp_weight=sp_weight)
     weight_random_reset_fn = jax.jit(
         functools.partial(jax.tree_map, reinit_fn))
     params = weight_random_reset_fn(params, outgoing_mask,

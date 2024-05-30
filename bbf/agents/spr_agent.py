@@ -1042,6 +1042,7 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
       log_every=100,
       hcp=False,
       dead_neuron_threshold=0.0,
+      rsp_weight=0.5
   ):
     """Initializes the agent and constructs the necessary components.
 
@@ -1273,6 +1274,7 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
 
     self.hcp = hcp
     self.dead_neuron_threshold = dead_neuron_threshold
+    self.rsp_weight = rsp_weight
     self.current_count = {'projection/net': onp.zeros(2048)}
     self.total_count = {'projection/net': onp.zeros(2048)}
     logging.info(self.hcp)
@@ -1602,7 +1604,8 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
         self.current_count,
         self.total_count,
         dead_neurons_threshold=self.dead_neuron_threshold,
-        init_method_outgoing='random',)
+        init_method_outgoing='random',
+        sp_weight=self.rsp_weight)
     (
         new_online_params,
         new_target_params,
